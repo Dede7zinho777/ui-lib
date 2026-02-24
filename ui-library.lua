@@ -1,18 +1,18 @@
 -- ===========================================
--- FLUENT UI LIBRARY (APENAS A INTERFACE)
+-- FLUENT UI - APENAS A INTERFACE
+-- (Sem funções, só a cara)
 -- ===========================================
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 
--- Verificar se carregou
 if not Fluent then
-    warn("❌ Erro ao carregar Fluent UI")
+    warn("❌ Erro: Não foi possível carregar a Fluent UI")
     return
 end
 
--- Criar a janela principal
+-- Criar a janela
 local Window = Fluent:CreateWindow({
-    Title = "Minha UI",
+    Title = "MINHA UI",
     SubTitle = "by Dede7zinho777",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
@@ -20,14 +20,14 @@ local Window = Fluent:CreateWindow({
     Theme = "Dark"
 })
 
--- Criar as abas padrão (Main e Settings)
+-- Criar as abas (Main, Settings e Teste)
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "home" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
-    Teste = Window:AddTab({ Title = "TESTE", Icon = "test-tube" }) -- Aba extra
+    Teste = Window:AddTab({ Title = "TESTE", Icon = "test-tube" })
 }
 
--- Retornar tudo para ser usado no script
+-- Retornar tudo para ser usado
 return {
     Fluent = Fluent,
     Window = Window,
