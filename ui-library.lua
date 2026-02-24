@@ -1,35 +1,33 @@
 -- ===========================================
--- UI PERSONALIZADA - FOTO SÓ NO BOTÃO FLUTUANTE
+-- UI CORRIGIDA - SEM ERROS DE ÍCONE
 -- ===========================================
 
 -- CARREGAR ORION LIBRARY
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 
 -- ===========================================
--- CRIAR BOTÃO FLUTUANTE (COM SUA FOTO)
+-- CRIAR BOTÃO FLUTUANTE (ÚNICO LUGAR COM A FOTO)
 -- ===========================================
 local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.CoreGui
 
--- BOTÃO FLUTUANTE (ÚNICO LUGAR COM A FOTO)
+-- BOTÃO FLUTUANTE (SÓ ELE TEM FOTO)
 local botaoFlutuante = Instance.new("ImageButton")
-botaoFlutuante.Name = "BotaoFechar"
 botaoFlutuante.Parent = screenGui
 botaoFlutuante.BackgroundTransparency = 1
-botaoFlutuante.Image = "rbxassetid://138340742425851"  -- FOTO SÓ AQUI!
-botaoFlutuante.Size = UDim2.new(0, 50, 0, 50)
+botaoFlutuante.Image = "rbxassetid://138340742425851"
+botaoFlutuante.Size = UDim2.new(0, 60, 0, 60)
 botaoFlutuante.Position = UDim2.new(0, 100, 0, 100)
-botaoFlutuante.Draggable = true  -- PODE ARRASTAR
+botaoFlutuante.Draggable = true
 botaoFlutuante.Active = true
 
--- VARIÁVEIS DE CONTROLE
+-- VARIÁVEIS
 local uiAberta = true
 local MainWindow = nil
 
 -- ===========================================
--- FUNÇÃO PARA CRIAR A UI (SEM FOTO)
+-- FUNÇÃO PARA CRIAR UI (SEM NENHUM ÍCONE!)
 -- ===========================================
 local function criarUI()
     if MainWindow then
@@ -37,25 +35,19 @@ local function criarUI()
         MainWindow = nil
     end
 
-    -- JANELA PRINCIPAL (SEM ÍCONE)
+    -- JANELA PRINCIPAL - SEM ÍCONE
     MainWindow = OrionLib:MakeWindow({
         Name = "MEU SCRIPT",
-        HidePremium = false,
-        SaveConfig = true,
-        ConfigFolder = "MeuScriptConfig",
+        HidePremium = true,  -- Muda pra true pra evitar coisas premium
+        SaveConfig = false,  -- Desativa config pra evitar erros
         IntroEnabled = false,
-        -- Icon = nil  (SEM ÍCONE!)
-        CloseCallback = function()
-            print("UI fechada pelo X")
-            uiAberta = false
-        end
+        -- NÃO colocar Icon aqui!
     })
 
-    -- ABA PRINCIPAL (SEM ÍCONE)
+    -- ABA PRINCIPAL - SEM ÍCONE
     local AbaPrincipal = MainWindow:MakeTab({
-        Name = "Principal",
-        -- Icon = nil  (SEM ÍCONE!)
-        PremiumOnly = false
+        Name = "Principal"
+        -- NÃO colocar Icon aqui!
     })
 
     -- SEÇÃO TESTE
@@ -63,26 +55,27 @@ local function criarUI()
         Name = "🔧 TESTES"
     })
 
-    -- TOGGLE TESTE-MSG (o que você pediu)
+    -- TOGGLE TESTE-MSG (sem imagem nas notificações pra evitar erro)
     AbaPrincipal:AddToggle({
         Name = "teste-msg",
         Default = false,
         Callback = function(Value)
             if Value then
-                print("🔔 TESTE ATIVADO!")
+                print("🟢 TESTE ATIVADO!")
+                -- Notificação SEM imagem
                 OrionLib:MakeNotification({
                     Name = "✅ TESTE",
                     Content = "Mensagem de teste ativada!",
-                    Image = "rbxassetid://138340742425851",  -- FOTO SÓ NA NOTIFICAÇÃO
                     Time = 3
+                    -- SEM Image aqui!
                 })
             else
-                print("❌ TESTE DESATIVADO!")
+                print("🔴 TESTE DESATIVADO!")
                 OrionLib:MakeNotification({
                     Name = "❌ TESTE",
                     Content = "Mensagem de teste desativada!",
-                    Image = "rbxassetid://138340742425851",  -- FOTO SÓ NA NOTIFICAÇÃO
                     Time = 3
+                    -- SEM Image aqui!
                 })
             end
         end
@@ -95,19 +88,24 @@ local function criarUI()
             uiAberta = false
             MainWindow:Destroy()
             MainWindow = nil
+            -- Notificação sem imagem
+            OrionLib:MakeNotification({
+                Name = "🔴 UI Fechada",
+                Content = "Clique no botão para abrir",
+                Time = 2
+            })
         end
     })
 
     -- BOTÃO DE TESTE
     AbaPrincipal:AddButton({
-        Name = "Testar Notificação",
+        Name = "Testar",
         Callback = function()
             print("✅ Teste executado!")
             OrionLib:MakeNotification({
-                Name = "✅ TESTE",
-                Content = "Notificação funcionando!",
-                Image = "rbxassetid://138340742425851",  -- FOTO SÓ NA NOTIFICAÇÃO
-                Time = 3
+                Name = "✅ FUNCIONOU!",
+                Content = "Tudo certo!",
+                Time = 2
             })
         end
     })
@@ -126,38 +124,19 @@ botaoFlutuante.MouseButton1Click:Connect(function()
             MainWindow:Destroy()
             MainWindow = nil
         end
-        -- Mostra notificação que fechou
-        OrionLib:MakeNotification({
-            Name = "🔴 UI Fechada",
-            Content = "Clique no botão para abrir",
-            Image = "rbxassetid://138340742425851",
-            Time = 2
-        })
+        -- Botão continua visível
     else
         -- ABRIR UI
         uiAberta = true
         criarUI()
-        -- Mostra notificação que abriu
-        OrionLib:MakeNotification({
-            Name = "🟢 UI Aberta",
-            Content = "teste-msg disponível",
-            Image = "rbxassetid://138340742425851",
-            Time = 2
-        })
     end
 end)
 
 -- ===========================================
--- INICIAR TUDO
+-- INICIAR
 -- ===========================================
 criarUI()
 
--- NOTIFICAÇÃO INICIAL
-OrionLib:MakeNotification({
-    Name = "✅ Script Carregado!",
-    Content = "Use o botão flutuante para abrir/fechar",
-    Image = "rbxassetid://138340742425851",
-    Time = 4
-})
-
-print("🚀 Script carregado! Foto apenas no botão flutuante!")
+-- Mensagem inicial no console apenas
+print("🚀 Script carregado! Botão flutuante com sua foto funcionando!")
+print("💡 Clique no botão com a foto para abrir/fechar a UI")
