@@ -1,60 +1,41 @@
 -- ===========================================
--- BOTÃO FLUTUANTE LIBRARY - DEFINITIVO
+-- BOTÃO FLUTUANTE (SEPARADO)
 -- ===========================================
 
-local BotaoFlutuanteLib = {}
+local Botao = {}
 
-function BotaoFlutuanteLib:Criar(Config)
-    Config = Config or {}
-    Config.Image = Config.Image or "rbxassetid://138340742425851"
-    Config.Tamanho = Config.Tamanho or 60
-    Config.Posicao = Config.Posicao or UDim2.new(0, 30, 0, 200)
-    Config.Arrastavel = Config.Arrastavel ~= nil and Config.Arrastavel or true
-    Config.UIAlvo = Config.UIAlvo or "Orion"
+function Botao:Criar(config)
+    config = config or {}
+    local imagem = config.Image or "rbxassetid://138340742425851"
+    local tamanho = config.Tamanho or 60
+    local posicao = config.Posicao or UDim2.new(0, 20, 0, 150)
     
     -- CRIAR BOTÃO
-    local Botao = Instance.new("ImageButton")
-    Botao.Parent = game:GetService("CoreGui")
-    Botao.BackgroundTransparency = 1
-    Botao.Image = Config.Image
-    Botao.Size = UDim2.new(0, Config.Tamanho, 0, Config.Tamanho)
-    Botao.Position = Config.Posicao
-    Botao.Draggable = Config.Arrastavel
-    Botao.Name = "BotaoFlutuante"
-    Botao.BackgroundColor3 = Color3.fromRGB(255,255,255)
+    local botao = Instance.new("ImageButton")
+    botao.Name = "BotaoFlutuante"
+    botao.Parent = game:GetService("CoreGui")
+    botao.BackgroundTransparency = 1
+    botao.Image = imagem
+    botao.Size = UDim2.new(0, tamanho, 0, tamanho)
+    botao.Position = posicao
+    botao.Draggable = true
+    botao.Active = true
     
     -- BORDA ARREDONDADA
-    local UICorner = Instance.new("UICorner")
-    UICorner.Parent = Botao
-    UICorner.CornerRadius = UDim.new(0, Config.Tamanho/2)
+    local uiCorner = Instance.new("UICorner")
+    uiCorner.Parent = botao
+    uiCorner.CornerRadius = UDim.new(0, tamanho/2)
     
-    -- CONTROLE DA UI
-    local uiVisible = true
-    
-    -- FUNÇÃO PARA ENCONTRAR UI
-    local function encontrarUI()
-        for _, v in pairs(game:GetService("CoreGui"):GetChildren()) do
-            if v.Name == Config.UIAlvo then
-                return v
-            end
-        end
-        return nil
-    end
-    
-    -- CLIQUE NO BOTÃO
-    Botao.MouseButton1Click:Connect(function()
-        uiVisible = not uiVisible
-        local ui = encontrarUI()
-        if ui then
-            ui.Enabled = uiVisible
-        end
-        if Config.AoClick then
-            Config.AoClick(uiVisible)
-        end
+    -- EFEITO HOVER
+    botao.MouseEnter:Connect(function()
+        botao.Size = UDim2.new(0, tamanho + 5, 0, tamanho + 5)
     end)
     
-    print("✅ Botão flutuante criado! Controla: " .. Config.UIAlvo)
-    return Botao
+    botao.MouseLeave:Connect(function()
+        botao.Size = UDim2.new(0, tamanho, 0, tamanho)
+    end)
+    
+    return botao
 end
 
-return BotaoFlutuanteLib
+return Botao
